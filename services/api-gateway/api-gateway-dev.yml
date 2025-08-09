@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Access-Control-Request-Headers
+            - SaveSession
+          routes:
+            - id: account-service # Register Account Service
+              uri: lb://ACCOUNT-SERVICE
+              predicates:
+                - Path=/api/accounts/**
+              filters:
+                - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
+
+            - id: payment-service # Register Payment Service
+              uri: lb://PAYMENT-SERVICE
+              predicates:
+                - Path=/api/payments/**
+              filters:
+                - RewritePath=/api/payments/(?<segment>.*), /api/payments/${segment}
+
+            - id: transaction-service # Register Transaction Service
+              uri: lb://TRANSACTION-SERVICE
+              predicates:
+                - Path=/api/transactions/**
+              filters:
+                - RewritePath=/api/transactions/(?<segment>.*), /api/transactions/${segment}
+
+            - id: notification-service # Register Transaction Service
+              uri: lb://NOTIFICATION-SERVICE
+              predicates:
+                - Path=/api/notifications/**
+              filters:
+                - RewritePath=/api/notifications/(?<segment>.*), /api/notifications/${segment}
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_URL:http://127.0.0.1:8887/eureka/}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      access: none
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+server:
+  port: 8888
