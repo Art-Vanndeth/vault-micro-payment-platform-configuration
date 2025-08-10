@@ -40,6 +40,17 @@ kafka:
   topics:
     transaction-created-events-topic: transaction-created-events-topic
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
 eureka:
   instance:
     preferIpAddress: true
