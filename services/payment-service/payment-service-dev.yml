@@ -33,7 +33,10 @@ management:
         include: "*"
   endpoint:
     health:
+      probes:
+        enabled: true
       show-details: always
+
 eureka:
   client:
     service-url:
