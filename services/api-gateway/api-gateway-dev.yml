@@ -39,7 +39,9 @@ spring:
               predicates:
                 - Path=/api/notifications/**
               filters:
-                - RewritePath=/api/notifications/(?<segment>.*), /api/notifications/${segment}
+                - RewritePath=/api/notifications/(?<segment>.*), /${segment}
+              metadata:
+                websocket-enabled: true
 
 eureka:
   instance:
