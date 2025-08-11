@@ -34,12 +34,12 @@ spring:
               filters:
                 - RewritePath=/api/transactions/(?<segment>.*), /api/transactions/${segment}
 
-            - id: notification-service # Register Transaction Service
-              uri: lb://NOTIFICATION-SERVICE
+            - id: notification-service # Register Notification Service
+              uri: http://127.0.0.1:8095
               predicates:
-                - Path=/api/notifications/**
+                - Path=/notifications/**
               filters:
-                - RewritePath=/api/notifications/(?<segment>.*), /${segment}
+                - RewritePath=/notifications/(?<segment>.*), /${segment}
               metadata:
                 websocket-enabled: true
 
