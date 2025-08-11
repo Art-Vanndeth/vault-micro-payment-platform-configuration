@@ -43,6 +43,7 @@ spring:
               metadata:
                 websocket-enabled: true
 
+
 eureka:
   instance:
     preferIpAddress: true
