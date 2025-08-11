@@ -38,8 +38,6 @@ spring:
               uri: http://127.0.0.1:8095
               predicates:
                 - Path=/notifications/**
-              filters:
-                - RewritePath=/notifications/(?<segment>.*), /${segment}
               metadata:
                 websocket-enabled: true
 
