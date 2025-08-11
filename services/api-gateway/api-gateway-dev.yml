@@ -34,13 +34,14 @@ spring:
               filters:
                 - RewritePath=/api/transactions/(?<segment>.*), /api/transactions/${segment}
 
-            - id: notification-service # Register Notification Service
+            - id: notification-service
               uri: http://127.0.0.1:8095
               predicates:
                 - Path=/notifications/**
+              filters:
+                - RewritePath=/notifications/(?<segment>.*), /${segment}
               metadata:
                 websocket-enabled: true
-
 
 eureka:
   instance:
