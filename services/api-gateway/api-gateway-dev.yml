@@ -40,8 +40,8 @@ spring:
                 - Path=/notifications/**
               filters:
                 - RewritePath=/notifications/(?<segment>.*), /${segment}
-              metadata:
-                websocket-enabled: true
+#              metadata:
+#                websocket-enabled: true
 
 eureka:
   instance:
