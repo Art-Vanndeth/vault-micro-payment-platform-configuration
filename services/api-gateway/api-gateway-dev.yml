@@ -35,9 +35,10 @@ spring:
                 - RewritePath=/api/transactions/(?<segment>.*), /api/transactions/${segment}
 
             - id: notification-service
-              uri: http://127.0.0.1:8095
+              uri: lb://NOTIFICATION-SERVICE
               predicates:
                 - Path=/notifications/**
+                - Header=Upgrade, websocket
               filters:
                 - RewritePath=/notifications/(?<segment>.*), /${segment}
                 - RewritePath=/notifications/api/(?<segment>.*), /api/notifications/${segment}
