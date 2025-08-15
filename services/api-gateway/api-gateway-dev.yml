@@ -34,20 +34,12 @@ spring:
               filters:
                 - RewritePath=/api/transactions/(?<segment>.*), /api/transactions/${segment}
 
-            # STOMP WebSocket route (handles both HTTP and WebSocket for SockJS)
-            - id: notification-websocket
-              uri: http://127.0.0.1:8095  # Use HTTP for SockJS initial handshake
-              predicates:
-                - Path=/notifications/ws/**
-              filters:
-                - RewritePath=/notifications/ws/(?<segment>.*), /ws/${segment}
-
-            # Regular HTTP API route
             - id: notification-service
               uri: http://127.0.0.1:8095
               predicates:
-                - Path=/notifications/api/**
+                - Path=/notifications/**
               filters:
+                - RewritePath=/notifications/(?<segment>.*), /${segment}
                 - RewritePath=/notifications/api/(?<segment>.*), /api/notifications/${segment}
 
 
