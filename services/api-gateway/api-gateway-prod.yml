@@ -1,0 +1,97 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Access-Control-Request-Headers
+            - SaveSession
+          routes:
+            # Account Service
+            - id: account-service
+              uri: lb://ACCOUNT-SERVICE
+              predicates:
+                - Path=/api/accounts/**
+              filters:
+                - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
+
+            # Payment Service
+            - id: payment-service
+              uri: lb://PAYMENT-SERVICE
+              predicates:
+                - Path=/api/payments/**
+              filters:
+                - RewritePath=/api/payments/(?<segment>.*), /api/payments/${segment}
+
+            # Transaction Service
+            - id: transaction-service
+              uri: lb://TRANSACTION-SERVICE
+              predicates:
+                - Path=/api/transactions/**
+              filters:
+                - RewritePath=/api/transactions/(?<segment>.*), /api/transactions/${segment}
+
+            # Notification REST API
+            - id: notification-rest
+              uri: lb://NOTIFICATION-SERVICE
+              predicates:
+                - Path=/api/notifications/**
+              filters:
+                - RewritePath=/notifications/api/(?<segment>.*), /api/notifications/${segment}
+
+            # Notification WebSocket
+            - id: notification-ws
+              uri: lb:ws://NOTIFICATION-SERVICE
+              predicates:
+                - Path=/ws/**
+              filters:
+                - RewritePath=/notifications/ws/(?<segment>.*), /notifications/ws/${segment}
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://127.0.0.1:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_URL:http://127.0.0.1:8887/eureka/}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+server:
+  port: 8888

@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: payment-service
+
+  r2dbc:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
+    pool:
+      initial-size: 10
+      max-size: 20
+
+  kafka:
+    bootstrap-servers: ${kafka.bootstrap-servers}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+kafka:
+  topics:
+    payment-created-events-topic: payment-created-events-topic
+
+integration:
+  account-service:
+    url: http://localhost:8090/api/accounts
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8887/eureka/
+  instance:
+    prefer-ip-address: true
+
+server:
+  port: 8091
