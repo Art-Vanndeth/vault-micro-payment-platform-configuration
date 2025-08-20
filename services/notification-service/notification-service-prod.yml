@@ -4,11 +4,10 @@ spring:
 
   data:
     mongodb:
-      uri: ${mongo.uri}
-      database: ${mongo.database}
+      uri: ${MONGO_URI}
 
   kafka:
-    bootstrap-servers: ${kafka.bootstrap-servers}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

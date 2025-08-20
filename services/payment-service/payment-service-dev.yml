@@ -3,15 +3,15 @@ spring:
     name: payment-service
 
   r2dbc:
-    url: ${DB_URL:r2dbc:postgresql://127.0.0.1:5432/payment_platform}
-    username: ${DB_USERNAME:payment_user}
-    password: ${DB_PASSWORD:payment_password}
+    url: ${R2DBC_POSTGRES_URL}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     pool:
       initial-size: 10
       max-size: 20
 
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
