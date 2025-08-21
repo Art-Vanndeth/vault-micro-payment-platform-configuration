@@ -4,7 +4,8 @@ spring:
 
   data:
     mongodb:
-      uri: ${MONGO_URI}
+      uri: mongodb://${MONGO_USERNAME:mongo_user}:${MONGO_PASSWORD:mongo_password}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_DATABASE:notification_db}?authSource=${MONGO_AUTH_DB:admin}
+      database: ${MONGO_DATABASE:notification_db}
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
@@ -25,17 +26,39 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
     listener:
       missing-topics-fatal: false
+  cloud:
+    stream:
+      bindings:
+        notificationProcessor-in-0:
+          destination: notifications
+          content-type: application/json
+        notificationProcessor-out-0:
+          destination: processed-notifications
+          content-type: application/json
 
 kafka:
   topics:
     transaction-created-events-topic: transaction-created-events-topic
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
 eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://127.0.0.1:8887/eureka/
   instance:
     preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_URL:http://127.0.0.1:8887/eureka/}
 
 server:
   port: 8095
