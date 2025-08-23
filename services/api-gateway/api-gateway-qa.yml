@@ -69,15 +69,6 @@ spring:
             allowCredentials: true
             maxAge: 3600
 
-eureka:
-  instance:
-    preferIpAddress: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: ${EUREKA_SERVER_URL:http://127.0.0.1:8887/eureka/}
-
 management:
   endpoints:
     web:
@@ -87,6 +78,20 @@ management:
       probes:
         enabled: true
       show-details: always
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_URL:http://127.0.0.1:8887/eureka/}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: TRACE
 
 server:
   port: 8888

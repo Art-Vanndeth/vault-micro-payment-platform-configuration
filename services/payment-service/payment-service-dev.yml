@@ -38,11 +38,13 @@ management:
       show-details: always
 
 eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8887/eureka/
   instance:
-    prefer-ip-address: true
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8887/eureka/}
 
 server:
   port: 8091

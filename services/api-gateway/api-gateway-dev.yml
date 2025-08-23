@@ -69,6 +69,16 @@ spring:
             allowCredentials: true
             maxAge: 3600
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
 eureka:
   instance:
     preferIpAddress: true
@@ -82,16 +92,6 @@ logging:
   level:
     root: INFO
     org.springframework.cloud.gateway: TRACE
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-    health:
-      probes:
-        enabled: true
-      show-details: always
 
 server:
   port: 8888
